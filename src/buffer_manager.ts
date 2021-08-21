@@ -192,12 +192,7 @@ export class BufferManager implements Disposable, NeovimRedrawProcessable, Neovi
                 if (fileName === "__vscode_new__") {
                     doc = await workspace.openTextDocument();
                 } else {
-                    const uri = await this.getInternalUri(fileName)
-                    if (uri) {
-                        doc = await workspace.openTextDocument(uri);
-                    } else {
-                        doc = await workspace.openTextDocument(fileName.trim());
-                    }
+                    doc = await workspace.openTextDocument(fileName.trim());
                 }
                 if (!doc) {
                     return;
@@ -590,15 +585,6 @@ export class BufferManager implements Disposable, NeovimRedrawProcessable, Neovi
             return true;
         }
         return false;
-    }
-
-    private async getInternalUri(name: string): Promise<Uri | undefined> {
-        const files = await workspace.findFiles('**/' + name)
-        const file = files.find(f => f.fsPath.indexOf(name) !== -1)
-        if (file) {
-            return file
-        }
-        return undefined;
     }
 
     private findDocFromUri(uri: string): TextDocument | undefined {
