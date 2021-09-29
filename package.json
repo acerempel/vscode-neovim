@@ -1262,9 +1262,9 @@
         "lint": "eslint --ext .ts src",
         "test": "node ./out/test/runTest.js",
         "pretest": "yarn run test-compile",
-        "vscode:prepublish": "webpack --mode production",
-        "webpack": "webpack --mode development",
-        "webpack-dev": "webpack --mode development --watch",
+        "vscode:prepublish": "yarn run webpack --mode production",
+        "dev": "yarn run webpack --mode development",
+        "watch": "yarn run webpack --mode development --watch",
         "test-compile": "tsc -p ./"
     },
     "devDependencies": {
