@@ -51,6 +51,9 @@ export class CommandLineController implements Disposable {
         this.disposables.push(
             commands.registerCommand("vscode-neovim.complete-selection-cmdline", this.acceptSelection),
         );
+        this.disposables.push(
+            commands.registerCommand("vscode-neovim.paste-register-cmdline", (reg) => this.pasteFromRegister(reg)),
+        );
     }
 
     public show(initialContent = "", mode: string, prompt = ""): void {
@@ -265,5 +268,17 @@ export class CommandLineController implements Disposable {
             }
             this.input.show();
         }
+    };
+
+    private pasteFromRegister = async (registerName: string): Promise<void> => {
+        if (!this.isDisplayed) {
+            return;
+        }
+        const content = await this.neovimClient.callFunction("VSCodeGetRegister", [registerName]);
+        if (content === "") {
+            return;
+        }
+        this.input.value = this.input.value.concat(content);
+        this.onChange(this.input.value);
     };
 }
